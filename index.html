@@ -1,0 +1,62 @@
+<html>
+   <head>
+      <title>Enviar arquivo de Audio</title>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	  <script>
+		$(document).ready(function() {
+			$.ajax({
+				url: 'http://93.188.166.187:7753/voices',
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'GET',
+				success: function(data){
+					$('#voice option').remove(); // limpar itens da combo
+					$('#voice').append('<option value="">Selecione uma Voz</option>'); // add o primeiro item da combo
+					$.each(JSON.parse(data).models, function(i, item) { // add os demais itens que estão no JSON de retorno
+						$('#voice').append('<option value="'+ (i+1) +'">'+ item.name +'</option>');
+					});
+				}
+			});
+		
+			$('#enviar').on('click', function(e) {
+				e.preventDefault();
+				
+				var fromData = new FormData();
+				jQuery.each(jQuery('#file')[0].files, function(i, file) {
+					fromData.append('file-'+i, file);
+				});
+				
+				fromData.append('voice', $('#voice :selected').text());
+			
+				jQuery.ajax({
+					url: 'http://93.188.166.187:7753/sttext',
+					data: fromData,
+					cache: false,
+					contentType: false,
+					processData: false,
+					type: 'POST',
+					success: function(data){
+						alert(data);
+					}
+				});
+			});
+		});
+		
+	  </script>
+   </head>
+
+   <body>
+      <h3>Arquivo para upload:</h3>
+      Selecione um arquivo de Audio para Enviar: <br />
+      <form action="/" method = "POST" enctype = "multipart/form-data">
+		 <select name="voice" id="voice">
+			<option value="">Selecione uma Voz</option>
+		 </select> 
+		 <br /><br />
+         <input type="file" name="file" id="file" size="50" />
+         <br /><br />
+         <input type = "submit" value = "Enviar Arquivo" id="enviar"/>
+      </form>
+   </body>
+</html>
