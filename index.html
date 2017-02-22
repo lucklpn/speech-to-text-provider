@@ -5,7 +5,7 @@
 	  <script>
 		$(document).ready(function() {
 			$.ajax({
-				url: 'http://93.188.166.187:7753/voices',
+				url: 'https://speech-to-text-provider.mybluemix.net/voices',
 				cache: false,
 				contentType: false,
 				processData: false,
@@ -30,7 +30,7 @@
 				fromData.append('voice', $('#voice :selected').text());
 			
 				jQuery.ajax({
-					url: 'http://93.188.166.187:7753/sttext',
+					url: 'https://speech-to-text-provider.mybluemix.net/sttext',
 					data: fromData,
 					cache: false,
 					contentType: false,
